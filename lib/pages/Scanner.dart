@@ -21,13 +21,62 @@ class _ScannerPageState extends State<ScannerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Expanded(
-        child: Column(
-          children: const [
-            bb.BackButton()
-          ],
+      body: SafeArea(
+        child: Container(
+          color: Colors.grey,
+          width: double.infinity,
+          //alignment: Alignment.topLeft,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Padding(
+                      padding: EdgeInsets.only(left: 16.0, top: 24.0),
+                      child: bb.BackButton(),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 512.0,
+              ),
+              Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      height: 48,
+                      width: 48,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60.0),
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      child: const Icon(
+                        FontAwesomeIcons.images,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(            //Camera Button
+                      height: 64,
+                      width: 64,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(60.0),
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
+
+
+
+
