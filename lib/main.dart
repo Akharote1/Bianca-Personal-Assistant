@@ -102,7 +102,7 @@ class AppState extends State<App> with WidgetsBindingObserver{
         }
 
       },
-      initialRoute: '/scanner',
+      initialRoute: '/home',
     );
   }
 

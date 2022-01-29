@@ -1,7 +1,7 @@
 import 'package:bianca/colors.dart';
+import 'package:bianca/widgets/back_button.dart' as bb;
 import 'package:bianca/widgets/curve_footer.dart';
 import 'package:bianca/widgets/mic_button.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -23,6 +23,7 @@ class HomePageState extends State<HomePage>{
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
@@ -56,14 +57,58 @@ class HomePageState extends State<HomePage>{
                   )
                 ],
               ),
+              SizedBox(height: 32,),
+              Container(
+                width: double.infinity,
+                height: 128,
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white
+                ),
+              ),
+              SizedBox(height: 32,),
+              const Text(
+                'Movies for you',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16
+                ),
+              ),
+              const SizedBox(height: 16,),
+              SizedBox(
+                height: 128,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 8,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: 96,
+                        height: 144,
+                        margin: EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: Colors.black
+                        ),
+                      );
+                    }
+                )
+              )
             ],
           )
         ),
       ),
-      bottomNavigationBar: const CurveFooter(
+      bottomNavigationBar: CurveFooter(
         child: SizedBox(
           width: double.infinity,
           height: 128,
+          child: Row(
+            children: [
+
+            ],
+          )
         )
       ),
       floatingActionButton: Container(
