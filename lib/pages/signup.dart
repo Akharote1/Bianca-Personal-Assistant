@@ -535,6 +535,22 @@ class SignUpPage4 extends StatefulWidget {
 }
 
 class _SignUpPage4State extends State<SignUpPage4> {
+
+  static List<Map<String, dynamic>> interestList = [
+    {
+      'name': 'Anime',
+      'image': 'anime.jpeg',
+      'id': 'anime',
+      'checked': false
+    },
+    {
+      'name': 'Movies',
+      'image': 'anime.jpeg',
+      'id': 'movies',
+      'checked': false
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -542,112 +558,128 @@ class _SignUpPage4State extends State<SignUpPage4> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            CurveHeader(
-              child: Container(
-                  width: double.infinity,
-                  height: 256,
-                  color: AppColors.primary,
-                  child: Stack(
-                    children: [
-                      SizedBox(
+    return Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          CurveHeader(
+            child: Container(
+                width: double.infinity,
+                height: 256,
+                color: AppColors.primary,
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 256,
+                      child: Opacity(
+                        child: Image.asset(
+                          'assets/bg1.png',
+                          fit: BoxFit.cover,
+                        ),
+                        opacity: 0.1,
+                      ),
+                    ),
+                    Container(
                         width: double.infinity,
-                        height: 256,
-                        child: Opacity(
-                          child: Image.asset(
-                            'assets/bg1.png',
-                            fit: BoxFit.cover,
-                          ),
-                          opacity: 0.1,
-                        ),
-                      ),
-                      Container(
-                          width: double.infinity,
-                          height: 196,
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.only(top: 32),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                'Choose',
-                                style: TextStyle(
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.w400
-                                ),
+                        height: 196,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.only(top: 32),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              'Choose',
+                              style: TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w400
                               ),
-                              Text(
-                                ' Interests',
-                                style: TextStyle(
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.w600
-                                ),
-                              )
-                            ],
-                          )
-                      )
-                    ],
-                  )
-              ),
+                            ),
+                            Text(
+                              ' Interests',
+                              style: TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w600
+                              ),
+                            )
+                          ],
+                        )
+                    )
+                  ],
+                )
             ),
-            Expanded(
-              child: Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: GridView.count(
-                      childAspectRatio: 1.5,
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      children: List.generate(10, (index) {
-                        return _createCard();
-                      }),
-                    ),
+          ),
+          const SizedBox(height: 24,),
+          const Text(
+            'What do you like?',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w700
+            ),
+          ),
+          Expanded(
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: GridView.count(
+                    physics: const BouncingScrollPhysics(),
+                    childAspectRatio: 1.5,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 8,
+                    children: interestList.map((item){
+                      return _createCard(item);
+                    }).toList(),
                   ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    padding: const EdgeInsets.only(bottom: 32),
-                    child: FloatingActionButton(
-                      onPressed: (){
-                        widget.root.setState(() {
-                          widget.root.currentPage = 3;
-                        });
-                      },
-                      child: const Padding(
-                        child: Icon(
-                          FontAwesomeIcons.arrowRight,
-                          color: Colors.white,
-                        ),
-                        padding: EdgeInsets.all(8),
+                ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: const EdgeInsets.only(bottom: 32),
+                  child: FloatingActionButton(
+                    onPressed: (){
+                      Navigator.pushReplacementNamed(context, 'home');
+                    },
+                    child: const Padding(
+                      child: Icon(
+                        FontAwesomeIcons.arrowRight,
+                        color: Colors.white,
                       ),
-                      elevation: 0,
-                      hoverElevation: 1,
-                      focusElevation: 1,
+                      padding: EdgeInsets.all(8),
                     ),
-                  )
-                ],
-              )
+                    elevation: 0,
+                    hoverElevation: 1,
+                    focusElevation: 1,
+                  ),
+                )
+              ],
             )
-          ]
-      ),
+          )
+        ]
     );
   }
 
-  Widget _createCard(){
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.red,
-        borderRadius: BorderRadius.circular(16),
-      ),
+  Widget _createCard(Map<String, dynamic> item){
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: (){
+        setState(() {
+          item['checked'] = !item['checked'];
+        });
+      },
       child: Stack(
         children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              'assets/interests/${item['image']}',
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
           Container(
             width: double.infinity,
             height: double.infinity,
@@ -656,8 +688,28 @@ class _SignUpPage4State extends State<SignUpPage4> {
               borderRadius: BorderRadius.circular(16),
             ),
           ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            alignment: Alignment.bottomLeft,
+            child: Text(
+              item['name'],
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600
+              ),
+            ),
+          ),
+          if(item['checked'] == true)
+            Container(
+                padding: const EdgeInsets.all(24),
+                alignment: Alignment.topRight,
+                child: const Icon(
+                  FontAwesomeIcons.check,
+                  size: 16,
+                )
+            ),
         ],
-      ),
+      )
     );
   }
 }

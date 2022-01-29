@@ -1,4 +1,5 @@
 
+import 'package:bianca/pages/home.dart';
 import 'package:bianca/pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -80,6 +81,16 @@ class AppState extends State<App> with WidgetsBindingObserver{
               transitionDuration: const Duration(milliseconds: 250)
           );
         }
+
+        if (settings.name == "/home") {
+          return PageRouteBuilder(
+              settings: settings,
+              pageBuilder: (a,b,c) => const HomePage(),
+              transitionsBuilder: (a,b,c,d) => FadeTransition(opacity: b, child: d),
+              transitionDuration: const Duration(milliseconds: 250)
+          );
+        }
+
       },
       initialRoute: '/onboarding',
     );
