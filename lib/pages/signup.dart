@@ -7,6 +7,7 @@ import 'package:bianca/widgets/lbuttons.dart';
 import 'package:bianca/widgets/ltextfield.dart';
 import 'package:bianca/widgets/progress_gauge.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 
 class SignUpPage extends StatefulWidget{
 
@@ -379,22 +380,16 @@ class SignUpPage3 extends StatefulWidget {
 }
 
 class _SignUpPage3State extends State<SignUpPage3> {
-  late TextEditingController otpCont;
   bool disabled = true;
   String error = '';
 
   @override
   void initState() {
     super.initState();
-    otpCont = TextEditingController();
 
     void onUpdate(){
       disabled = false;
       error = '';
-
-      if(otpCont.value.text.trim().length != 4){
-        disabled = true;
-      }
 
       setState(() {
         if(Config.debug){
@@ -404,7 +399,6 @@ class _SignUpPage3State extends State<SignUpPage3> {
       });
     }
 
-    otpCont.addListener(onUpdate);
   }
 
   @override
@@ -434,23 +428,33 @@ class _SignUpPage3State extends State<SignUpPage3> {
                           width: double.infinity,
                           alignment: Alignment.topCenter,
                           margin: const EdgeInsets.only(top: 108),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                'Your',
-                                style: TextStyle(
-                                  fontSize: 42,
-                                  fontWeight: FontWeight.w400
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    'Your',
+                                    style: TextStyle(
+                                      fontSize: 42,
+                                      fontWeight: FontWeight.w400
+                                    ),
+                                  ),
+                                  Text(
+                                    ' Profile',
+                                    style: TextStyle(
+                                        fontSize: 42,
+                                        fontWeight: FontWeight.w600
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 32.0),
+                                  child: Lottie.network('https://assets5.lottiefiles.com/packages/lf20_9eLZ98.json'),
                                 ),
                               ),
-                              Text(
-                                ' Profile',
-                                style: TextStyle(
-                                    fontSize: 42,
-                                    fontWeight: FontWeight.w600
-                                ),
-                              )
                             ],
                           )
                       )
@@ -538,15 +542,51 @@ class _SignUpPage4State extends State<SignUpPage4> {
 
   static List<Map<String, dynamic>> interestList = [
     {
-      'name': 'Anime',
-      'image': 'anime.jpeg',
-      'id': 'anime',
+      'name': 'Music',
+      'image': 'music-img.jpg',
+      'id': 'music',
       'checked': false
     },
     {
       'name': 'Movies',
-      'image': 'anime.jpeg',
+      'image': 'movies-img.jpg',
       'id': 'movies',
+      'checked': false
+    },
+    {
+      'name': 'Shows',
+      'image': 'shows-img.jpg',
+      'id': 'shows',
+      'checked': false
+    },
+    {
+      'name': 'Fitness',
+      'image': 'fitness-img.jpg',
+      'id': 'fitness',
+      'checked': false
+    },
+    {
+      'name': 'Anime',
+      'image': 'anime-img.jpg',
+      'id': 'anime',
+      'checked': false
+    },
+    {
+      'name': 'Programming',
+      'image': 'programming-img.jpg',
+      'id': 'programming',
+      'checked': false
+    },
+    {
+      'name': 'Travelling',
+      'image': 'travelling-img.jpg',
+      'id': 'travelling',
+      'checked': false
+    },
+    {
+      'name': 'Architecture',
+      'image': 'architecture-img.jpg',
+      'id': 'architecture',
       'checked': false
     },
   ];
@@ -694,7 +734,7 @@ class _SignUpPage4State extends State<SignUpPage4> {
             child: Text(
               item['name'],
               style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600
               ),
             ),
