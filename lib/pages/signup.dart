@@ -18,18 +18,24 @@ class SignUpPage extends StatefulWidget{
   }
 }
 
-class SignUpPageState extends State<SignUpPage>{
-  int currentPage = 0;
+class SignUpPageState extends State<SignUpPage> {
+  PageController controller = PageController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: getPage()
+      body: PageView.builder(
+        itemBuilder: (context, i) {
+          return getPage(i) ?? Container();
+        },
+        physics: const NeverScrollableScrollPhysics(),
+        controller: controller,
+      )
     );
   }
 
-  Widget? getPage(){
+  Widget? getPage(int currentPage){
     if(currentPage == 0) {
       return SignUpPage1(this);
     }
@@ -197,8 +203,9 @@ class _SignUpPage1State extends State<SignUpPage1> {
                         text: 'SIGN UP',
                         disabled: disabled,
                         onPressed: (){
-                          widget.root.currentPage = 1;
-                          widget.root.setState(() {});
+                          widget.root.controller.animateToPage(1,
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeIn);
                         },
                       ),
                     ),
@@ -341,8 +348,9 @@ class _SignUpPage2State extends State<SignUpPage2> {
                         text: 'VERIFY',
                         disabled: disabled,
                         onPressed: (){
-                          widget.root.currentPage = 2;
-                          widget.root.setState(() {});
+                          widget.root.controller.animateToPage(2,
+                            duration: const Duration(milliseconds: 250),
+                            curve: Curves.easeIn);
                         },
                       ),
                     ),
@@ -500,7 +508,9 @@ class _SignUpPage3State extends State<SignUpPage3> {
                 FloatingActionButton(
                   onPressed: (){
                     widget.root.setState(() {
-                      widget.root.currentPage = 3;
+                      widget.root.controller.animateToPage(3,
+                          duration: const Duration(milliseconds: 250),
+                          curve: Curves.easeIn);
                     });
                   },
                   child: const Padding(
@@ -640,7 +650,7 @@ class _SignUpPage4State extends State<SignUpPage4> {
                   padding: const EdgeInsets.only(bottom: 32),
                   child: FloatingActionButton(
                     onPressed: (){
-                      Navigator.pushReplacementNamed(context, 'home');
+                      Navigator.pushReplacementNamed(context, '/home');
                     },
                     child: const Padding(
                       child: Icon(
