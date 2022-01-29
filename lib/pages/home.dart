@@ -4,6 +4,7 @@ import 'package:bianca/widgets/curve_footer.dart';
 import 'package:bianca/widgets/mic_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,6 +16,28 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage>{
+
+  List<Map<String, dynamic>> rows = [
+    {
+      'title': 'Movies for you',
+      'items': [
+        {
+          'title': 'Avengers: Endgame',
+          'image':  'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/d1pklzbuyaab0la-1552597012.jpg'
+        }
+      ]
+    },
+    {
+      'title': 'Books for you',
+      'items': [
+        {
+          'title': 'Avengers: Endgame',
+          'image':  'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/d1pklzbuyaab0la-1552597012.jpg'
+        }
+      ]
+    }
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,44 +80,73 @@ class HomePageState extends State<HomePage>{
                   )
                 ],
               ),
-              SizedBox(height: 32,),
-              Container(
-                width: double.infinity,
-                height: 128,
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.white
-                ),
-              ),
-              SizedBox(height: 32,),
-              const Text(
-                'Movies for you',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16
-                ),
-              ),
-              const SizedBox(height: 16,),
-              SizedBox(
-                height: 128,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 8,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: 96,
-                        height: 144,
-                        margin: EdgeInsets.only(right: 8),
+              const SizedBox(height: 32,),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: Colors.black
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white
                         ),
-                      );
-                    }
-                )
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                    width: 72,
+                                    height: 72,
+                                    child: Lottie.asset('assets/animations/cloudy.json')
+                                ),
+                                const SizedBox(width: 16,),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '10 °C',
+                                        style: TextStyle(
+                                            fontSize: 32,
+                                            color: Colors.black.withOpacity(0.75),
+                                            fontWeight: FontWeight.w600
+                                        ),
+                                      ),
+                                      Text(
+                                        'Sunny',
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black.withOpacity(0.75),
+                                            fontWeight: FontWeight.w600
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 16,),
+                            Text(
+                              'Wear light clothing',
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.6),
+                                  fontWeight: FontWeight.w500
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      ),
+                      ..._createRecList(),
+
+                    ],
+                  ),
+                ),
               )
             ],
           )
@@ -106,7 +158,32 @@ class HomePageState extends State<HomePage>{
           height: 128,
           child: Row(
             children: [
-
+              Container(
+                width: 64,
+                height: 64,
+                margin: const EdgeInsets.only(top: 36, left: 32),
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                    onTap: () {},
+                    child: const Icon(
+                      FontAwesomeIcons.camera
+                    )
+                ),
+              ),
+              Expanded(
+                  child: Container(
+                    width: 64,
+                    height: 64,
+                    margin: const EdgeInsets.only(top: 36, right: 32),
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        FontAwesomeIcons.keyboard
+                      )
+                    ),
+                  )
+              )
             ],
           )
         )
@@ -123,6 +200,61 @@ class HomePageState extends State<HomePage>{
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  List<Widget> _createRecList(){
+    return rows.map((row){
+      return Column(
+        children: [
+          const SizedBox(height: 32,),
+          Text(
+            row['title'] ?? '',
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+                fontSize: 16
+            ),
+          ),
+          const SizedBox(height: 16,),
+          SizedBox(
+            height: 180,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (context, index) {
+                return Container(
+                  width: 96,
+                  height: 144,
+                  margin: const EdgeInsets.only(right: 8),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.network(
+                          row['items'][index % row['items'].length]['image'],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(height: 4,),
+                      Text(
+                        row['items'][index % row['items'].length]['title'],
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(0.6),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600
+                        ),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                );
+              }
+            )
+          )
+        ],
+      );
+    }).toList();
   }
 
 }

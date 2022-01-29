@@ -92,7 +92,7 @@ class AppState extends State<App> with WidgetsBindingObserver{
         }
 
       },
-      initialRoute: '/home',
+      initialRoute: '/signup',
     );
   }
 

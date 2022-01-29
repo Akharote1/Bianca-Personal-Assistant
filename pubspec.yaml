@@ -76,6 +76,7 @@ flutter:
     - assets/bg1.png
     - assets/fonts/
     - assets/interests/
+    - assets/animations/
 
   fonts:
     - family: Montserrat

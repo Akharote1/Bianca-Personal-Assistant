@@ -1,4 +1,5 @@
 import 'package:bianca/config.dart';
+import 'package:bianca/widgets/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bianca/colors.dart';
@@ -147,6 +148,12 @@ class LoginPageState extends State<LoginPage>{
                         white: false,
                         text: 'LOGIN',
                         disabled: disabled,
+                        onPressed: (){
+                          LoaderDialog.show(
+                            context,
+                            message: 'Logging in'
+                          );
+                        },
                       ),
                     ),
                     const SizedBox(height: 16,),
