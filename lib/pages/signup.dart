@@ -599,6 +599,18 @@ class _SignUpPage4State extends State<SignUpPage4> {
       'id': 'architecture',
       'checked': false
     },
+    {
+      'name': 'Sports',
+      'image': 'sports-img.jpg',
+      'id': 'sports',
+      'checked': false
+    },
+    {
+      'name': 'Memes',
+      'image': 'memes-img.jpg',
+      'id': 'memes',
+      'checked': false
+    },
   ];
 
   @override
