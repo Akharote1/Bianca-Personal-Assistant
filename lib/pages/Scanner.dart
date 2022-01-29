@@ -36,36 +36,57 @@ class _ScannerPageState extends State<ScannerPage> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 512.0,
               ),
               Stack(
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      height: 48,
-                      width: 48,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60.0),
-                        color: Colors.black.withOpacity(0.5),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        height: 48,
+                        width: 48,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60.0),
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                        child: const Icon(
+                          FontAwesomeIcons.images,
+                          size: 18,
+                        ),
                       ),
-                      child: const Icon(
-                        FontAwesomeIcons.images,
-                        size: 18,
+                      Container(            //Camera Button
+                        height: 64,
+                        width: 64,
+                        padding: EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60.0),
+                          color: Colors.white,
+                        ),
+                        child: Container(
+                          height: 48,
+                          width: 48,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60.0),
+                            border: Border.all()
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(            //Camera Button
-                      height: 64,
-                      width: 64,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60.0),
-                        color: Colors.white,
+                      Container(
+                        height: 48,
+                        width: 48,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(60.0),
+                          color: Colors.black.withOpacity(0),
+                        ),
+                        // child: const Icon(
+                        //   FontAwesomeIcons.images,
+                        //   size: 18,
+                        // ),
                       ),
-                    ),
+                    ],
                   )
                 ],
               )
