@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class BackButton extends StatefulWidget {
+class Pressable extends StatefulWidget {
   VoidCallback? onPressed;
+  Widget child;
 
-  BackButton({Key? key, this.onPressed}) : super(key: key);
+  Pressable({Key? key, this.onPressed, required this.child}) : super(key: key);
 
   @override
-  State<BackButton> createState() => _BackButtonState();
+  State<Pressable> createState() => _PressableState();
 }
 
-class _BackButtonState extends State<BackButton> {
+class _PressableState extends State<Pressable> {
   bool _pressed = false;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedScale(
-      scale: _pressed ? 0.8 : 1,
+      scale: _pressed ? 0.9 : 1,
       duration: const Duration(milliseconds: 100),
       child: GestureDetector(
         onTapDown: (_) => setState(() {
@@ -33,20 +34,7 @@ class _BackButtonState extends State<BackButton> {
             widget.onPressed!();
           }
         },
-        child: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(60),
-            color: Colors.black.withOpacity(0.5)
-          ),
-          child: const Icon(
-            FontAwesomeIcons.chevronLeft,
-            size: 18,
-          ),
-          padding: const EdgeInsets.all(12.0),
-          alignment: Alignment.center,
-        ),
+        child: widget.child,
       ),
     );
   }

@@ -1,4 +1,6 @@
 import 'package:bianca/config.dart';
+import 'package:bianca/providers/user.dart';
+import 'package:bianca/widgets/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bianca/colors.dart';
@@ -8,6 +10,7 @@ import 'package:bianca/widgets/ltextfield.dart';
 import 'package:bianca/widgets/progress_gauge.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget{
 
@@ -187,7 +190,7 @@ class _SignUpPage1State extends State<SignUpPage1> {
                       controller: cpassCont,
                     ),
                     const SizedBox(height: 16,),
-                    if(disabled && error != '')
+                    if(error != '')
                       Text(
                         error,
                         style: const TextStyle(
@@ -203,11 +206,27 @@ class _SignUpPage1State extends State<SignUpPage1> {
                         white: false,
                         text: 'SIGN UP',
                         disabled: disabled,
-                        onPressed: (){
-                          widget.root.controller.animateToPage(1,
-                              duration: const Duration(milliseconds: 250),
-                              curve: Curves.easeIn);
-                        },
+                          onPressed: () async {
+                            LoaderDialog.show(
+                                context,
+                                message: 'Logging in'
+                            );
+                            Map<String, dynamic> result = await
+                            Provider.of<UserProvider>(context, listen: false)
+                                .signUp(emailCont.text.trim(), passCont.text.trim());
+
+                            Navigator.pop(context);
+
+                            if(result['success'] == true){
+                              widget.root.controller.animateToPage(2,
+                                  duration: const Duration(milliseconds: 250),
+                                  curve: Curves.easeIn);
+                            } else {
+                              setState(() {
+                                error = result['message'];
+                              });
+                            }
+                          }
                       ),
                     ),
                     const SizedBox(height: 16,),
@@ -391,13 +410,26 @@ class _SignUpPage3State extends State<SignUpPage3> {
   bool disabled = true;
   String error = '';
 
+  late TextEditingController nameCont;
+  late TextEditingController ageCont;
+
   @override
   void initState() {
     super.initState();
+    nameCont = TextEditingController();
+    ageCont = TextEditingController();
 
     void onUpdate(){
       disabled = false;
       error = '';
+
+      if(nameCont.value.text.trim().isEmpty){
+        disabled = true;
+      }
+
+      if(!RegExp('^\\d{1,2}\$').hasMatch(ageCont.value.text)){
+        disabled = true;
+      }
 
       setState(() {
         if(Config.debug){
@@ -407,6 +439,8 @@ class _SignUpPage3State extends State<SignUpPage3> {
       });
     }
 
+    nameCont.addListener(onUpdate);
+    ageCont.addListener(onUpdate);
   }
 
   @override
@@ -477,30 +511,25 @@ class _SignUpPage3State extends State<SignUpPage3> {
               children: [
                 const SizedBox(height: 32,),
                 LTextField(
-                    title: 'Full Name',
-                    hint: 'Aditya Kharote'
+                  title: 'Full Name',
+                  hint: 'Aditya Kharote',
+                  controller: nameCont,
                 ),
                 const SizedBox(height: 16,),
                 Row(
                   children: [
                     Expanded(
                       child: LTextField(
-                          title: 'Age',
-                          hint: '18'
-                      ),
-                    ),
-                    const SizedBox(width: 16,),
-                    Expanded(
-                      child: LTextField(
-                          title: 'Gender',
-                          hint: '----'
+                        title: 'Age',
+                        hint: '18',
+                        controller: ageCont,
                       ),
                     )
                   ],
                 ),
-                if(disabled && error != '')
+                if(error != '')
                   const SizedBox(height: 16,),
-                if(disabled && error != '')
+                if(error != '')
                   Text(
                     error,
                     style: const TextStyle(
@@ -510,12 +539,32 @@ class _SignUpPage3State extends State<SignUpPage3> {
                   ),
                 const SizedBox(height: 32,),
                 FloatingActionButton(
-                  onPressed: (){
-                    widget.root.setState(() {
-                      widget.root.controller.animateToPage(3,
-                          duration: const Duration(milliseconds: 250),
-                          curve: Curves.easeIn);
-                    });
+                  onPressed: () async{
+                    LoaderDialog.show(
+                        context,
+                        message: 'Updating Profile'
+                    );
+                    Map<String, dynamic> result = await
+                    Provider.of<UserProvider>(context, listen: false)
+                        .updateProfile(
+                        nameCont.text.trim(),
+                        int.parse(ageCont.text.trim()),
+                        -1,
+                    );
+
+                    Navigator.pop(context);
+
+                    if(result['success'] == true){
+                      widget.root.setState(() {
+                        widget.root.controller.animateToPage(3,
+                            duration: const Duration(milliseconds: 250),
+                            curve: Curves.easeIn);
+                      });
+                    } else {
+                      setState(() {
+                        error = result['message'];
+                      });
+                    }
                   },
                   child: const Padding(
                     child: Icon(
@@ -701,8 +750,34 @@ class _SignUpPage4State extends State<SignUpPage4> {
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.only(bottom: 32),
                   child: FloatingActionButton(
-                    onPressed: (){
-                      Navigator.pushReplacementNamed(context, '/home');
+                    onPressed: () async {
+                      List<String> interests = [];
+                      for (var element in interestList) {
+                        if(element['checked'] == true){
+                          interests.add(element['id']);
+                        }
+                      }
+
+                      LoaderDialog.show(
+                          context,
+                          message: 'Updating Interests'
+                      );
+                      Map<String, dynamic> result = await
+                      Provider.of<UserProvider>(context, listen: false)
+                          .updateInterests(interests);
+
+                      Navigator.pop(context);
+
+                      if(result['success'] == true){
+                        while(Navigator.canPop(context)) {
+                          Navigator.pop(context);
+                        }
+                        Navigator.pushNamed(context, '/splash');
+                      } else {
+                        setState(() {
+
+                        });
+                      }
                     },
                     child: const Padding(
                       child: Icon(

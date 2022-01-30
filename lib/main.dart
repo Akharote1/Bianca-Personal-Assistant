@@ -1,18 +1,25 @@
 
-import 'package:bianca/pages/Scanner.dart';
+import 'package:bianca/pages/scanner.dart';
 import 'package:bianca/pages/home.dart';
 import 'package:bianca/pages/login.dart';
+import 'package:bianca/pages/splash.dart';
+import 'package:bianca/providers/user.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bianca/pages/onboarding.dart';
 import 'package:bianca/pages/signup.dart';
+import 'package:provider/provider.dart';
 
 import 'colors.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
-      const App()
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      builder: (context, _) => const App(),
+    )
   );
 }
 
@@ -32,10 +39,6 @@ class AppState extends State<App> with WidgetsBindingObserver{
   void initState() {
     WidgetsBinding.instance?.addObserver(this);
     super.initState();
-
-  }
-
-  void initialize() async {
   }
 
   @override
@@ -56,6 +59,15 @@ class AppState extends State<App> with WidgetsBindingObserver{
           fontFamily: 'Montserrat'
       ),
       onGenerateRoute: (settings) {
+        if (settings.name == "/splash") {
+          return PageRouteBuilder(
+              settings: settings,
+              pageBuilder: (a,b,c) => const SplashPage(),
+              transitionsBuilder: (a,b,c,d) => FadeTransition(opacity: b, child: d),
+              transitionDuration: const Duration(milliseconds: 250)
+          );
+        }
+
         if (settings.name == "/login") {
           return PageRouteBuilder(
               settings: settings,
@@ -102,7 +114,7 @@ class AppState extends State<App> with WidgetsBindingObserver{
         }
 
       },
-      initialRoute: '/scanner',
+      initialRoute: '/splash',
     );
   }
 

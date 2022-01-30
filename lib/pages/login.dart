@@ -1,4 +1,5 @@
 import 'package:bianca/config.dart';
+import 'package:bianca/providers/user.dart';
 import 'package:bianca/widgets/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:bianca/widgets/curve_header.dart';
 import 'package:bianca/widgets/lbuttons.dart';
 import 'package:bianca/widgets/ltextfield.dart';
 import 'package:bianca/widgets/progress_gauge.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget{
 
@@ -132,7 +134,7 @@ class LoginPageState extends State<LoginPage>{
                       controller: passCont,
                     ),
                     const SizedBox(height: 16,),
-                    if(disabled && error != '')
+                    if(error != '')
                       Text(
                         error,
                         style: const TextStyle(
@@ -148,11 +150,27 @@ class LoginPageState extends State<LoginPage>{
                         white: false,
                         text: 'LOGIN',
                         disabled: disabled,
-                        onPressed: (){
+                        onPressed: () async {
                           LoaderDialog.show(
                             context,
                             message: 'Logging in'
                           );
+                          Map<String, dynamic> result = await
+                              Provider.of<UserProvider>(context, listen: false)
+                              .login(emailCont.text.trim(), passCont.text.trim());
+
+                          Navigator.pop(context);
+
+                          if(result['success'] == true){
+                            while(Navigator.canPop(context)) {
+                              Navigator.pop(context);
+                            }
+                            Navigator.pushNamed(context, '/splash');
+                          } else {
+                            setState(() {
+                              error = result['message'];
+                            });
+                          }
                         },
                       ),
                     ),

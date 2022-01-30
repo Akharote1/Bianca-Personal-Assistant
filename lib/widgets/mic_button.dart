@@ -1,10 +1,14 @@
 import 'package:bianca/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'dart:math' as math;
 
 class MicButton extends StatefulWidget {
-  const MicButton({Key? key}) : super(key: key);
+  Function onMicUpdate;
+
+  MicButton({Key? key, required this.onMicUpdate}) : super(key: key);
 
   @override
   _MicButtonState createState() => _MicButtonState();
@@ -13,6 +17,47 @@ class MicButton extends StatefulWidget {
 class _MicButtonState extends State<MicButton> {
   bool _pressed = false;
   bool isMicActive = false;
+  bool _speechEnabled = false;
+  final SpeechToText _speechToText = SpeechToText();
+  String _lastWords = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _initSpeech();
+  }
+
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    setState(() {});
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      onDevice: true
+    );
+    setState(() {
+      isMicActive = true;
+      widget.onMicUpdate(isMicActive, _lastWords);
+    });
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() {
+      isMicActive = false;
+      widget.onMicUpdate(isMicActive, _lastWords);
+      _lastWords = '';
+    });
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      _lastWords = result.recognizedWords;
+      widget.onMicUpdate(isMicActive, _lastWords);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +68,11 @@ class _MicButtonState extends State<MicButton> {
         onTap: () {
           setState(() {
             isMicActive = !isMicActive;
+            if(isMicActive) {
+              _startListening();
+            } else {
+              _stopListening();
+            }
           });
         },
         onTapDown: (_) => setState(() {
